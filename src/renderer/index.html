@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SN Server Manager</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+    </head>
+    <body class="bg-dark text-light">
+        <!-- Title Bar -->
+        <div id="titlebar" class="titlebar">
+            <div class="titlebar-content">
+                <div class="titlebar-title">
+                    <i class="fas fa-cube text-primary"></i>
+                    <span>SN Server Manager</span>
+                </div>
+                <div class="titlebar-controls">
+                    <button class="titlebar-button minimize" id="minimize-btn">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="titlebar-button maximize" id="maximize-btn">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="titlebar-button close" id="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">Menu</h2>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="nav-item active" data-tab="servers">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-server"></i>
+                            <span>Servers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-tab="create-server">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-plus"></i>
+                            <span>Create Server</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-tab="plugins">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span>Browse Plugins</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-tab="settings">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="app-info">
+                        <small class="text-muted">Version 1.0.0</small>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Servers Tab -->
+                <div id="servers-tab" class="tab-content active">
+                    <div class="content-header">
+                        <h1 class="page-title">My Servers</h1>
+                        <div class="header-actions">
+                            <button
+                                class="btn btn-secondary"
+                                id="refresh-servers"
+                            >
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                id="create-server-btn"
+                            >
+                                <i class="fas fa-plus"></i>
+                                Create Server
+                            </button>
+                        </div>
+                    </div>
+                    <div class="server-list" id="server-list">
+                        <!-- Server cards will be populated here -->
+                        <div class="empty-state" id="empty-servers">
+                            <div class="empty-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <h3>No servers found</h3>
+                            <p>
+                                Create your first Minecraft server to get
+                                started
+                            </p>
+                            <button
+                                class="btn btn-primary"
+                                onclick="switchTab('create-server')"
+                            >
+                                <i class="fas fa-plus"></i>
+                                Create Server
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Server Tab -->
+                <div id="create-server-tab" class="tab-content">
+                    <div class="content-header">
+                        <h1 class="page-title">Create New Server</h1>
+                    </div>
+                    <div class="create-server-form">
+                        <form id="server-form" class="form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="server-name">Server Name</label>
+                                    <input
+                                        type="text"
+                                        id="server-name"
+                                        class="form-control"
+                                        placeholder="My Awesome Server"
+                                        required
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <label for="server-port">Port</label>
+                                    <input
+                                        type="number"
+                                        id="server-port"
+                                        class="form-control"
+                                        value="25565"
+                                        min="1"
+                                        max="65535"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="server-type">Server Type</label>
+                                    <select
+                                        id="server-type"
+                                        class="form-control"
+                                        required
+                                    >
+                                        <option value="leafmc" selected>
+                                            LeafMC (Plugin Support)
+                                        </option>
+                                        <option value="paper">
+                                            Paper (Plugin Support)
+                                        </option>
+                                        <option value="fabric">
+                                            Fabric (Mod Support)
+                                        </option>
+                                        <option value="forge">
+                                            Forge (Mod Support)
+                                        </option>
+                                        <option value="vanilla">Vanilla</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="minecraft-version"
+                                        >Minecraft Version</label
+                                    >
+                                    <select
+                                        id="minecraft-version"
+                                        class="form-control"
+                                        required
+                                    >
+                                        <option value="1.21.5" selected>
+                                            1.21.5
+                                        </option>
+                                        <option value="1.21.4">1.21.4</option>
+                                        <option value="1.20.4">1.20.4</option>
+                                        <option value="1.19.4">1.19.4</option>
+                                        <option value="1.18.2">1.18.2</option>
+                                        <option value="1.17.1">1.17.1</option>
+                                        <option value="1.16.5">1.16.5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div
+                                class="form-row server-version-container"
+                                id="leafmc-version-container"
+                            >
+                                <div class="form-group">
+                                    <label for="leafmc-version"
+                                        >LeafMC Version</label
+                                    >
+                                    <select
+                                        id="leafmc-version"
+                                        class="form-control"
+                                        required
+                                    >
+                                        <option value="">
+                                            Loading versions...
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="server-ram">RAM (MB)</label>
+                                    <div class="slider-container">
+                                        <input
+                                            type="range"
+                                            id="server-ram"
+                                            class="form-slider"
+                                            min="512"
+                                            max="16384"
+                                            value="2048"
+                                            step="256"
+                                        />
+                                        <div class="slider-value">
+                                            <span id="ram-value">2048</span> MB
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="form-row server-version-container d-none"
+                                id="paper-version-container"
+                            >
+                                <div class="form-group">
+                                    <label for="paper-version"
+                                        >Paper Version</label
+                                    >
+                                    <select
+                                        id="paper-version"
+                                        class="form-control"
+                                    >
+                                        <option value="">
+                                            Loading versions...
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div
+                                class="form-row server-version-container d-none"
+                                id="fabric-version-container"
+                            >
+                                <div class="form-group">
+                                    <label for="fabric-version"
+                                        >Fabric Version</label
+                                    >
+                                    <select
+                                        id="fabric-version"
+                                        class="form-control"
+                                    >
+                                        <option value="">
+                                            Loading versions...
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fabric-api"
+                                        >Include Fabric API</label
+                                    >
+                                    <label class="toggle">
+                                        <input
+                                            type="checkbox"
+                                            id="fabric-api"
+                                            checked
+                                        />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div
+                                class="form-row server-version-container d-none"
+                                id="forge-version-container"
+                            >
+                                <div class="form-group">
+                                    <label for="forge-version"
+                                        >Forge Version</label
+                                    >
+                                    <select
+                                        id="forge-version"
+                                        class="form-control"
+                                    >
+                                        <option value="">
+                                            Loading versions...
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="java-args"
+                                    >Java Arguments (Advanced)</label
+                                >
+                                <input
+                                    type="text"
+                                    id="java-args"
+                                    class="form-control"
+                                    value="-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200"
+                                    placeholder="Java JVM arguments"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        id="eula-checkbox"
+                                        required
+                                    />
+                                    <span class="checkmark"></span>
+                                    I agree to the
+                                    <a
+                                        href="https://aka.ms/MinecraftEULA"
+                                        target="_blank"
+                                        class="text-primary"
+                                        >Minecraft EULA</a
+                                    >
+                                </label>
+                            </div>
+                            <div class="form-actions">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    onclick="switchTab('servers')"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    id="show-server-type-info"
+                                    class="btn btn-secondary mr-2"
+                                >
+                                    <i class="fas fa-info-circle"></i>
+                                    Server Types
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    Create Server
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Plugins Tab -->
+                <div id="plugins-tab" class="tab-content">
+                    <div class="content-header">
+                        <h1 class="page-title">Browse Plugins</h1>
+                        <div class="header-actions">
+                            <div class="search-container">
+                                <input
+                                    type="text"
+                                    id="plugin-search"
+                                    class="search-input"
+                                    placeholder="Search plugins..."
+                                />
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plugins-content">
+                        <div class="filters-sidebar">
+                            <h3>Filters</h3>
+                            <div class="filter-group">
+                                <h4>Categories</h4>
+                                <div
+                                    id="category-filters"
+                                    class="filter-options"
+                                >
+                                    <!-- Category filters will be populated here -->
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <h4>Game Version</h4>
+                                <select
+                                    id="version-filter"
+                                    class="form-control"
+                                >
+                                    <option value="">All Versions</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <h4>Sort By</h4>
+                                <select id="sort-filter" class="form-control">
+                                    <option value="relevance">Relevance</option>
+                                    <option value="downloads">Downloads</option>
+                                    <option value="updated">
+                                        Recently Updated
+                                    </option>
+                                    <option value="newest">Newest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="plugins-grid" id="plugins-grid">
+                            <!-- Plugin cards will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-content">
+                    <div class="content-header">
+                        <h1 class="page-title">Settings</h1>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-section">
+                            <h3>General</h3>
+                            <div class="setting-item">
+                                <label for="auto-start"
+                                    >Auto-start servers on app launch</label
+                                >
+                                <label class="toggle">
+                                    <input type="checkbox" id="auto-start" />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label for="show-notifications"
+                                    >Show system notifications</label
+                                >
+                                <label class="toggle">
+                                    <input
+                                        type="checkbox"
+                                        id="show-notifications"
+                                        checked
+                                    />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Theme</h3>
+                            <div class="setting-item">
+                                <label for="theme-select">Color Theme</label>
+                                <select id="theme-select" class="form-control">
+                                    <option value="dark">Dark (Default)</option>
+                                    <option value="light">Light</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="accent-color">Accent Color</label>
+                                <div class="color-options">
+                                    <button
+                                        class="color-option active"
+                                        data-color="green"
+                                        style="background: var(--primary-color)"
+                                    ></button>
+                                    <button
+                                        class="color-option"
+                                        data-color="blue"
+                                        style="background: #3b82f6"
+                                    ></button>
+                                    <button
+                                        class="color-option"
+                                        data-color="purple"
+                                        style="background: #8b5cf6"
+                                    ></button>
+                                    <button
+                                        class="color-option"
+                                        data-color="red"
+                                        style="background: #ef4444"
+                                    ></button>
+                                    <button
+                                        class="color-option"
+                                        data-color="orange"
+                                        style="background: #f59e0b"
+                                    ></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Advanced</h3>
+                            <div class="setting-item">
+                                <label for="max-memory"
+                                    >Maximum Memory per Server (GB)</label
+                                >
+                                <input
+                                    type="number"
+                                    id="max-memory"
+                                    class="form-control"
+                                    value="8"
+                                    min="1"
+                                    max="32"
+                                />
+                            </div>
+                            <div class="setting-item">
+                                <button
+                                    class="btn btn-secondary"
+                                    id="clear-cache"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                    Clear Cache
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Server Type Info Modal -->
+        <div id="server-type-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Server Type Information</h2>
+                    <button class="modal-close" id="close-server-type-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="server-type-info">
+                        <div class="server-type-card">
+                            <h3>
+                                <i class="fas fa-leaf text-primary"></i> LeafMC
+                            </h3>
+                            <p>
+                                A high-performance Minecraft server optimized
+                                for plugins with stability improvements.
+                            </p>
+                            <ul>
+                                <li>
+                                    Based on Paper with additional optimizations
+                                </li>
+                                <li>Excellent plugin support</li>
+                                <li>Perfect for most server types</li>
+                            </ul>
+                        </div>
+                        <div class="server-type-card">
+                            <h3><i class="fas fa-paper-plane"></i> Paper</h3>
+                            <p>
+                                The most widely used Minecraft server software
+                                with plugin support.
+                            </p>
+                            <ul>
+                                <li>Great plugin compatibility</li>
+                                <li>Well-established community</li>
+                                <li>Good performance</li>
+                            </ul>
+                        </div>
+                        <div class="server-type-card">
+                            <h3><i class="fas fa-puzzle-piece"></i> Fabric</h3>
+                            <p>
+                                A lightweight mod loader for Minecraft focused
+                                on simplicity and performance.
+                            </p>
+                            <ul>
+                                <li>Excellent for mods</li>
+                                <li>Better performance than Forge</li>
+                                <li>Modern modding API</li>
+                            </ul>
+                        </div>
+                        <div class="server-type-card">
+                            <h3><i class="fas fa-hammer"></i> Forge</h3>
+                            <p>
+                                The original and most widely supported Minecraft
+                                mod loader.
+                            </p>
+                            <ul>
+                                <li>Largest mod ecosystem</li>
+                                <li>Best mod compatibility</li>
+                                <li>Most established modding platform</li>
+                            </ul>
+                        </div>
+                        <div class="server-type-card">
+                            <h3><i class="fas fa-cube"></i> Vanilla</h3>
+                            <p>
+                                The official Minecraft server software with no
+                                modifications.
+                            </p>
+                            <ul>
+                                <li>Official Mojang software</li>
+                                <li>No mod or plugin support</li>
+                                <li>Purest Minecraft experience</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="server-type-footer">
+                        <button
+                            class="btn btn-primary"
+                            id="select-server-type-btn"
+                        >
+                            Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Server Detail Modal -->
+        <div id="server-modal" class="modal">
+            <div class="modal-content server-modal-content">
+                <div class="modal-header">
+                    <h2 id="server-modal-title">Server Details</h2>
+                    <button class="modal-close" onclick="closeServerModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="server-modal-tabs">
+                    <button class="tab-btn active" data-tab="overview">
+                        Overview
+                    </button>
+                    <button class="tab-btn" data-tab="console">Console</button>
+                    <button class="tab-btn" data-tab="files">Files</button>
+                    <button class="tab-btn" data-tab="plugins">Plugins</button>
+                    <button class="tab-btn" data-tab="settings">
+                        Settings
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Overview Tab -->
+                    <div
+                        id="overview-content"
+                        class="server-tab-content active"
+                    >
+                        <div class="server-overview">
+                            <div class="server-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">Status</span>
+                                        <span
+                                            class="stat-value"
+                                            id="server-status"
+                                            >Offline</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">Players</span>
+                                        <span
+                                            class="stat-value"
+                                            id="player-count"
+                                            >0/20</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-microchip"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">CPU</span>
+                                        <span class="stat-value" id="cpu-usage"
+                                            >0%</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-memory"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">RAM</span>
+                                        <span class="stat-value" id="ram-usage"
+                                            >0 MB</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="server-actions">
+                                <button
+                                    class="btn btn-success"
+                                    id="start-server"
+                                >
+                                    <i class="fas fa-play"></i>
+                                    Start
+                                </button>
+                                <button
+                                    class="btn btn-warning"
+                                    id="restart-server"
+                                >
+                                    <i class="fas fa-redo"></i>
+                                    Restart
+                                </button>
+                                <button class="btn btn-danger" id="stop-server">
+                                    <i class="fas fa-stop"></i>
+                                    Stop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Console Tab -->
+                    <div id="console-content" class="server-tab-content">
+                        <div class="console-container">
+                            <div class="console-output" id="console-output">
+                                <!-- Console logs will be populated here -->
+                            </div>
+                            <div class="console-input-container">
+                                <input
+                                    type="text"
+                                    id="console-input"
+                                    class="console-input"
+                                    placeholder="Enter command..."
+                                />
+                                <button
+                                    class="btn btn-primary"
+                                    id="send-command"
+                                >
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Files Tab -->
+                    <div id="files-content" class="server-tab-content">
+                        <div class="file-manager">
+                            <div class="file-manager-toolbar">
+                                <button
+                                    class="btn btn-secondary"
+                                    id="create-folder"
+                                >
+                                    <i class="fas fa-folder-plus"></i>
+                                    New Folder
+                                </button>
+                                <button
+                                    class="btn btn-secondary"
+                                    id="upload-files"
+                                >
+                                    <i class="fas fa-upload"></i>
+                                    Upload Files
+                                </button>
+                                <button
+                                    class="btn btn-secondary"
+                                    id="refresh-files"
+                                >
+                                    <i class="fas fa-sync-alt"></i>
+                                    Refresh
+                                </button>
+                            </div>
+                            <div class="file-explorer">
+                                <div class="file-tree" id="file-tree">
+                                    <!-- File tree will be populated here -->
+                                </div>
+                                <div class="file-list" id="file-list">
+                                    <!-- File list will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plugins Tab -->
+                    <div id="plugins-content" class="server-tab-content">
+                        <div class="server-plugins">
+                            <div class="plugins-toolbar">
+                                <div class="search-container">
+                                    <input
+                                        type="text"
+                                        id="server-plugin-search"
+                                        class="search-input"
+                                        placeholder="Search installed plugins..."
+                                    />
+                                    <i class="fas fa-search search-icon"></i>
+                                </div>
+                                <button
+                                    class="btn btn-primary"
+                                    onclick="switchTab('plugins')"
+                                >
+                                    <i class="fas fa-plus"></i>
+                                    Browse More
+                                </button>
+                            </div>
+                            <div
+                                class="installed-plugins"
+                                id="installed-plugins"
+                            >
+                                <!-- Installed plugins will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div id="settings-content" class="server-tab-content">
+                        <div class="server-settings">
+                            <div class="settings-section">
+                                <h3>Server Properties</h3>
+                                <div
+                                    class="server-properties"
+                                    id="server-properties"
+                                >
+                                    <!-- Server properties will be populated here -->
+                                </div>
+                            </div>
+                            <div class="settings-section">
+                                <h3>Danger Zone</h3>
+                                <button
+                                    class="btn btn-danger"
+                                    id="delete-server"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                    Delete Server
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p id="loading-text">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Scripts -->
+        <script src="renderer.js"></script>
+        <script>
+            // Window control buttons
+            document
+                .getElementById("minimize-btn")
+                .addEventListener("click", () => {
+                    window.electronAPI.minimizeWindow();
+                });
+
+            document
+                .getElementById("maximize-btn")
+                .addEventListener("click", () => {
+                    window.electronAPI.maximizeWindow();
+                });
+
+            document
+                .getElementById("close-btn")
+                .addEventListener("click", () => {
+                    window.electronAPI.closeWindow();
+                });
+        </script>
+    </body>
+</html>
