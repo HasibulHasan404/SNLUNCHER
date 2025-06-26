@@ -53,7 +53,7 @@ A modern Minecraft Server Manager built with Electron.js, featuring a sleek Modr
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/sn-server-manager.git
+   git clone https://github.com/HasibulHasan404/sn-server-manager.git
    cd sn-server-manager
    ```
 
@@ -212,27 +212,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Check Modrinth API status
 - Ensure sufficient disk space
 
-### Getting Help
-- 📚 [Documentation](https://github.com/yourusername/sn-server-manager/wiki)
-- 🐛 [Issue Tracker](https://github.com/yourusername/sn-server-manager/issues)
-- 💬 [Discussions](https://github.com/yourusername/sn-server-manager/discussions)
-
 ## 🔗 Links
 
 - **LeafMC**: [https://www.leafmc.one/](https://www.leafmc.one/)
 - **Modrinth**: [https://modrinth.com/](https://modrinth.com/)
 - **Electron**: [https://www.electronjs.org/](https://www.electronjs.org/)
 
-## 🎯 Roadmap
-
-### Upcoming Features
-- [ ] Multi-server management dashboard
-- [ ] Automated backup scheduling
-- [ ] Plugin update notifications
-- [ ] Server performance analytics
-- [ ] Custom theme builder
-- [ ] Docker integration
-- [ ] Remote server management
 
 ### Version History
 - **v1.0.0**: Initial release with core functionality
