@@ -53,8 +53,8 @@ A modern Minecraft Server Manager built with Electron.js, featuring a sleek Modr
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/HasibulHasan404/sn-server-manager.git
-   cd sn-server-manager
+   git clone https://github.com/HasibulHasan404/SNLUNCHER.git
+   cd SNLUNCHER
    ```
 
 2. **Install dependencies**
